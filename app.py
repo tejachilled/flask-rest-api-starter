@@ -1,8 +1,10 @@
+import os
 import sqlite3
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+# Initialize database
 conn = sqlite3.connect('items.db')
 cursor = conn.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)")
@@ -23,4 +25,5 @@ def get_items():
     return jsonify([{"id": row[0], "name": row[1]} for row in rows])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(debug=False, host='0.0.0.0', port=port)
